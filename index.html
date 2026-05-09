@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Math Helper — Grades 3 & 4</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --primary: #4f46e5;
+      --primary-dark: #4338ca;
+      --bg: #f0f4ff;
+      --card: #ffffff;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #e2e8f0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      color: white;
+      padding: 2rem 1.5rem 1.5rem;
+      text-align: center;
+      box-shadow: 0 4px 16px rgba(79,70,229,0.3);
+    }
+
+    header h1 { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.5px; }
+    header p  { opacity: 0.85; margin-top: 0.25rem; font-size: 1rem; }
+
+    .grade-switcher {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-top: 1.25rem;
+    }
+
+    .grade-btn {
+      padding: 0.55rem 2rem;
+      border: 2px solid rgba(255,255,255,0.7);
+      background: transparent;
+      color: white;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .grade-btn:hover  { background: rgba(255,255,255,0.15); }
+    .grade-btn.active { background: white; color: #4f46e5; border-color: white; }
+
+    /* ── Main layout ── */
+    main {
+      max-width: 1100px;
+      margin: 2rem auto;
+      padding: 0 1.25rem 3rem;
+    }
+
+    .section-label {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--muted);
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* ── Topic grid ── */
+    .topics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .topic-card {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 1.4rem;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      border: 2px solid transparent;
+      transition: transform 0.18s, box-shadow 0.18s, border-color 0.18s;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+    .topic-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(79,70,229,0.15);
+      border-color: var(--primary);
+    }
+
+    .topic-icon { font-size: 2rem; flex-shrink: 0; line-height: 1; }
+    .topic-info h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.3rem; }
+    .topic-info p  { font-size: 0.83rem; color: var(--muted); line-height: 1.45; }
+
+    /* ── Vocab section ── */
+    .vocab-section {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    }
+
+    .vocab-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .vocab-card {
+      background: #f8fafc;
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+    }
+    .vocab-card strong { display: block; color: var(--primary); font-size: 0.92rem; margin-bottom: 0.2rem; }
+    .vocab-card span   { font-size: 0.82rem; color: var(--muted); line-height: 1.4; }
+
+    /* ── Modal overlay ── */
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15,23,42,0.55);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .overlay.open { display: flex; }
+
+    .panel {
+      background: white;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 660px;
+      max-height: 92vh;
+      overflow-y: auto;
+      padding: 2rem;
+      position: relative;
+      animation: slideUp 0.22s ease;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .panel-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: #f1f5f9;
+      border: none;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s;
+    }
+    .panel-close:hover { background: #e2e8f0; }
+
+    .panel-heading { font-size: 1.5rem; font-weight: 800; }
+    .panel-sub     { color: var(--muted); font-size: 0.88rem; margin-top: 0.25rem; margin-bottom: 1.4rem; }
+
+    /* ── Tabs ── */
+    .tabs {
+      display: flex;
+      gap: 0.25rem;
+      border-bottom: 2px solid var(--border);
+      margin-bottom: 1.4rem;
+    }
+
+    .tab-btn {
+      padding: 0.5rem 1.25rem;
+      border: none;
+      background: transparent;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
+
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
+
+    /* ── Lesson content pieces ── */
+    .lesson-box {
+      background: #f8fafc;
+      border-radius: 12px;
+      padding: 1.1rem 1.2rem;
+      margin-bottom: 1rem;
+      line-height: 1.65;
+      font-size: 0.95rem;
+    }
+    .lesson-box h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 0.45rem;
+    }
+
+    .example-box {
+      background: #eff6ff;
+      border-left: 4px solid #60a5fa;
+      border-radius: 6px;
+      padding: 0.9rem 1rem;
+      margin: 0.75rem 0;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      line-height: 1.7;
+      white-space: pre-wrap;
+    }
+
+    .tip-box {
+      background: #fef9c3;
+      border-radius: 10px;
+      padding: 0.9rem 1rem;
+      font-size: 0.88rem;
+      line-height: 1.5;
+      margin-top: 0.5rem;
+    }
+
+    /* ── Practice tab ── */
+    .practice-q {
+      background: #f8fafc;
+      border-radius: 12px;
+      padding: 1.4rem 1.2rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      text-align: center;
+      line-height: 1.5;
+      margin-bottom: 1rem;
+    }
+
+    .feedback-box {
+      border-radius: 10px;
+      padding: 0.8rem 1rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 0.9rem;
+      display: none;
+    }
+    .feedback-box.correct { background: #dcfce7; color: #16a34a; display: block; }
+    .feedback-box.wrong   { background: #fee2e2; color: #dc2626; display: block; }
+
+    .input-row {
+      display: flex;
+      gap: 0.7rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .answer-input {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      font-size: 1.05rem;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .answer-input:focus { border-color: var(--primary); }
+
+    .check-btn {
+      padding: 0.75rem 1.4rem;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .check-btn:hover { background: var(--primary-dark); }
+
+    .new-btn {
+      width: 100%;
+      padding: 0.65rem;
+      background: transparent;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .new-btn:hover { border-color: var(--primary); color: var(--primary); }
+
+    /* ── Fraction visual ── */
+    .frac-visual {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin: 0.6rem 0;
+    }
+    .frac-piece {
+      width: 38px;
+      height: 38px;
+      border-radius: 6px;
+      border: 2px solid #94a3b8;
+      background: #f1f5f9;
+    }
+    .frac-piece.on { background: var(--primary); border-color: var(--primary); }
+
+    /* ── Array visual ── */
+    .array-vis {
+      display: inline-grid;
+      gap: 5px;
+      margin: 0.5rem 0;
+    }
+    .dot {
+      width: 16px;
+      height: 16px;
+      background: var(--primary);
+      border-radius: 50%;
+    }
+
+    /* ── Key-word table ── */
+    .kw-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .kw-table th { background: #eff6ff; padding: 0.4rem 0.7rem; text-align: left; font-weight: 700; }
+    .kw-table td { padding: 0.4rem 0.7rem; }
+    .kw-table tr:nth-child(even) td { background: #f8fafc; }
+
+    /* ── Responsive ── */
+    @media (max-width: 560px) {
+      header h1 { font-size: 1.6rem; }
+      .topics-grid { grid-template-columns: 1fr; }
+      .panel { padding: 1.25rem; }
+      .panel-heading { font-size: 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🧮 Math Helper</h1>
+  <p>Lessons, examples &amp; practice problems for Grades 3 &amp; 4</p>
+  <div class="grade-switcher">
+    <button class="grade-btn active" onclick="switchGrade(3)">Grade 3</button>
+    <button class="grade-btn"        onclick="switchGrade(4)">Grade 4</button>
+  </div>
+</header>
+
+<main>
+  <!-- Grade 3 -->
+  <div id="sec3">
+    <p class="section-label">Grade 3 — click a topic to study</p>
+    <div class="topics-grid" id="grid3"></div>
+  </div>
+
+  <!-- Grade 4 -->
+  <div id="sec4" style="display:none">
+    <p class="section-label">Grade 4 — click a topic to study</p>
+    <div class="topics-grid" id="grid4"></div>
+  </div>
+
+  <!-- Vocabulary -->
+  <div class="vocab-section">
+    <p class="section-label" style="margin-bottom:0">📖 Math Vocabulary</p>
+    <div class="vocab-grid" id="vocab-grid"></div>
+  </div>
+</main>
+
+<!-- Modal -->
+<div class="overlay" id="overlay" onclick="overlayClick(event)">
+  <div class="panel" id="panel">
+    <button class="panel-close" onclick="closePanel()">✕</button>
+    <div class="panel-heading" id="p-title"></div>
+    <div class="panel-sub"     id="p-sub"></div>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('lesson')">Lesson</button>
+      <button class="tab-btn"        onclick="switchTab('practice')">Practice</button>
+    </div>
+
+    <div class="tab-pane active" id="tab-lesson"></div>
+    <div class="tab-pane"        id="tab-practice"></div>
+  </div>
+</div>
+
+<script>
+// ─────────────────────────────────────────────
+// DATA
+// ─────────────────────────────────────────────
+
+const GRADE3 = [
+  {
+    id: 'mult-div', icon: '✖️',
+    title: 'Multiplication & Division',
+    desc: 'Equal groups, arrays, times tables 6–9',
+    lesson() {
+      return `
+      <div class="lesson-box">
+        <h4>What is Multiplication?</h4>
+        <p>Multiplication means <strong>equal groups</strong>. 3 × 4 = "3 groups of 4 things."</p>
+        <div class="array-vis" id="arr-demo" style="grid-template-columns:repeat(4,16px)">
+          ${Array(12).fill('<div class="dot"></div>').join('')}
+        </div>
+        <p>3 rows × 4 columns = <strong>12</strong></p>
+      </div>
+      <div class="lesson-box">
+        <h4>Tricks for 6, 7, 8, 9 Times Tables</h4>
+        <p><strong>9s trick:</strong> The two digits of the answer always add up to 9!</p>
+        <div class="example-box">9 × 3 = 27  →  2 + 7 = 9 ✓
+9 × 6 = 54  →  5 + 4 = 9 ✓
+9 × 8 = 72  →  7 + 2 = 9 ✓</div>
+      </div>
+      <div class="lesson-box">
+        <h4>Division is the Opposite of Multiplication</h4>
+        <p>If 3 × 4 = 12, then 12 ÷ 3 = 4  and  12 ÷ 4 = 3</p>
+        <div class="example-box">Think of it as sharing:
+"12 divided into 3 equal groups = 4 in each group"</div>
+      </div>
+      <div class="tip-box">💡 <strong>Tip:</strong> Learn one times table at a time. Start with 6s, then 7s, 8s, 9s.</div>`;
+    },
+    practice() {
+      const tables = [6,7,8,9];
+      const a = tables[Math.floor(Math.random()*tables.length)];
+      const b = Math.floor(Math.random()*9)+2;
+      if (Math.random() > 0.5) return { q:`${a} × ${b} = ?`, a: a*b };
+      return { q:`${a*b} ÷ ${a} = ?`, a: b };
+    }
+  },
+
+  {
+    id: 'fractions3', icon: '🍕',
+    title: 'Fractions',
+    desc: 'What is a fraction? Comparing fractions',
+    lesson() {
+      return `
+      <div class="lesson-box">
+        <h4>What is a Fraction?</h4>
+        <p>A fraction shows <strong>part of a whole</strong>. The pizza below shows <strong>1/4</strong> shaded (1 out of 4 equal slices).</p>
+        <div class="frac-visual" id="frac-vis">
+          ${Array(4).fill(0).map((_,i)=>`<div class="frac-piece${i===0?' on':''}"></div>`).join('')}
+        </div>
+        <p><strong>Top number (numerator)</strong> = parts we have<br>
+           <strong>Bottom number (denominator)</strong> = total equal parts</p>
+      </div>
+      <div class="lesson-box">
+        <h4>Comparing Fractions</h4>
+        <p><strong>Same denominator?</strong> Bigger numerator = bigger fraction.</p>
+        <div class="example-box">3/8 > 1/8  (both cut into 8 pieces, but 3 > 1)</div>
+        <p style="margin-top:0.7rem"><strong>Same numerator?</strong> Smaller denominator = bigger fraction.</p>
+        <div class="example-box">1/3 > 1/4  (thirds are bigger slices than fourths)</div>
+      </div>
+      <div class="tip-box">💡 <strong>Tip:</strong> Draw the pizza! More slices = each slice is smaller.</div>`;
+    },
+    practice() {
+      const d = [3,4,6,8][Math.floor(Math.random()*4)];
+      const n1 = Math.floor(Math.random()*(d-1))+1;
+      let n2 = Math.floor(Math.random()*(d-1))+1;
+      while (n2 === n1) n2 = Math.floor(Math.random()*(d-1))+1;
+      const bigger = Math.max(n1,n2);
+      return { q:`Which fraction is bigger: ${n1}/${d}  or  ${n2}/${d}?`, a:`${bigger}/${d}` };
+    }
+  },
+
+  {
+    id: 'word3', icon: '📝',
+    title: 'Word Problems',
+    desc: 'Figuring out which operation to use',
+    lesson() {
+      return `
+      <div class="lesson-box">
+        <h4>Key Words That Tell You the Operation</h4>
+        <table class="kw-table">
+          <tr><th>Operation</th><th>Signal Words</th></tr>
+          <tr><td>➕ Add</td><td>total, sum, altogether, in all, more, combined</td></tr>
+          <tr><td>➖ Subtract</td><td>difference, fewer, left, remain, less than, take away</td></tr>
+          <tr><td>✖️ Multiply</td><td>each, per, groups of, times, every, rows of</td></tr>
+          <tr><td>➗ Divide</td><td>share equally, split, each gets, how many groups</td></tr>
+        </table>
+      </div>
+      <div class="lesson-box">
+        <h4>5 Steps to Solve Any Word Problem</h4>
+        <p>1. Read the entire problem<br>
+           2. Find the signal word<br>
+           3. Pick out the numbers<br>
+           4. Write the number sentence<br>
+           5. Solve and check your answer</p>
+      </div>
+      <div class="example-box">Problem: "Sam has 24 stickers. He shares them equally
+among 3 friends. How many does each friend get?"
+
+Signal word: "shares equally" → Divide
+Number sentence: 24 ÷ 3 = ?
+Answer: 8 stickers each ✓</div>
+      <div class="tip-box">💡 <strong>Tip:</strong> Always re-read the question after you solve to make sure you answered what was asked.</div>`;
+    },
+    practice() {
+      const pool = [
+        { q:'There are 5 bags with 7 apples in each bag. How many apples in total?', a:35 },
+        { q:'Lisa had 48 crayons and gave 13 away. How many does she have left?', a:35 },
+        { q:'4 friends share 32 grapes equally. How many does each get?', a:8 },
+        { q:'A shelf holds 6 books. There are 7 shelves. How many books altogether?', a:42 },
+        { q:'Tom scored 56 points. Jake scored 28. How many more did Tom score?', a:28 },
+        { q:'Each box holds 9 cookies. There are 6 boxes. How many cookies in total?', a:54 },
+        { q:'A class has 30 students split into groups of 5. How many groups are there?', a:6 },
+      ];
+      return pool[Math.floor(Math.random()*pool.length)];
+    }
+  },
+
+  {
+    id: 'place-value', icon: '🔢',
+    title: 'Place Value',
+    desc: 'Hundreds, tens, ones & regrouping',
+    lesson() {
+      return `
+      <div class="lesson-box">
+        <h4>Every Digit Has a Place</h4>
+        <div class="example-box" style="text-align:center; font-size:1.3rem; font-family:inherit">
+  3  4  7
+  ↑  ↑  ↑
+  H  T  O
+
+3 hundreds + 4 tens + 7 ones = 347</div>
+      </div>
+      <div class="lesson-box">
+        <h4>Regrouping (Carrying) in Addition</h4>
+        <p>When the ones add up to 10 or more, regroup into tens.</p>
+        <div class="example-box">  158
++ 275
+────
+Ones:  8+5=13 → write 3, carry 1
+Tens:  5+7+1=13 → write 3, carry 1
+Hundreds: 1+2+1=4
+Answer: 433</div>
+      </div>
+      <div class="lesson-box">
+        <h4>Regrouping (Borrowing) in Subtraction</h4>
+        <div class="example-box">  432
+- 158
+────
+Ones:  2 < 8, borrow → 12-8=4
+Tens:  2 (after borrow) < 5, borrow → 12-5=7
+Hundreds: 3 (after borrow) - 1=2
+Answer: 274</div>
+      </div>
+      <div class="tip-box">💡 <strong>Tip:</strong> Always start from the ones column (far right) and work left.</div>`;
+    },
+    practice() {
+      const a = Math.floor(Math.random()*400)+100;
+      const b = Math.floor(Math.random()*400)+100;
+      if (Math.random() > 0.5) return { q:`${a} + ${b} = ?`, a: a+b };
+      const big = Math.max(a,b), small = Math.min(a,b);
+      return { q:`${big} − ${small} = ?`, a: big-small };
+    }
+  },
+
+  {
+    id: 'time', icon: '🕐',
+    title: 'Telling Time & Elapsed Time',
+    desc: 'Reading clocks & calculating how much time has passed',
+    lesson() {
+      return `
+      <div class="lesson-box">
+        <h4>Reading an Analog Clock</h4>
+        <p>• <strong>Short hand</strong> = hours<br>
+           • <strong>Long hand</strong> = minutes (each number = 5 minutes)<br>
+           • Long hand at 12 = :00, at 3 = :15, at 6 = :30, at 9 = :45</p>
+      </div>
+      <div class="lesson-box">
+        <h4>Elapsed Time = How Much Time Has Passed</h4>
+        <div class="example-box">Start:   2:15 PM
+End:     3:45 PM
+────────────────
+2:15 → 3:15  =  1 hour
+3:15 → 3:45  =  30 minutes
+Total  =  1 hour 30 minutes</div>
+      </div>
+      <div class="lesson-box">
+        <h4>Another Strategy: Count Up</h4>
+        <p>Start at the start time, count full hours first, then leftover minutes.</p>
+      </div>
+      <div class="tip-box">💡 <strong>Tip:</strong> Count full hours first, then count the remaining minutes.</div>`;
+    },
+    practice() {
+      const startH = Math.floor(Math.random()*10)+1;
+      const startM = [0,15,30][Math.floor(Math.random()*3)];
+      const dur = [30,45,60,75,90][Math.floor(Math.random()*5)];
+      const totalMin = startH*60 + startM + dur;
+      const endH = Math.floor(totalMin/60)%12 || 12;
+      const endM = totalMin%60;
+      const pad = n => n.toString().padStart(2,'0');
+      return {
+        q: `School starts at ${startH}:${pad(startM)}. Lunch is ${dur} minutes later. What time is lunch?`,
+        a: `${endH}:${pad(endM)}`
+      };
+    }
+  }
+];
+
+const GRADE4 = [
+  {
+    id: 'multi-mult', icon: '✖️',
+    title: 'Multi-digit Multiplication',
+    desc: 'Standard algorithm — e.g., 34 × 27',
+    lesson() {
+      return `
+      <div class="lesson-box">
+        <h4>The Standard Algorithm — Step by Step</h4>
+        <div class="example-box">   34
+×  27
+────
+Step 1: Multiply by the ones digit (7)
+  34 × 7 = 238
+
+Step 2: Multiply by the tens digit (2 = 20)
+  Write a 0 first, then 34 × 2 = 68 → 680
+
+Step 3: Add the two rows
+  238
++ 680
+────
+  918</div>
+      </div>
+      <div class="lesson-box">
+        <h4>Why Write the Zero?</h4>
+        <p>When you multiply by the <em>tens digit</em>, you're really multiplying by 20, not 2. Writing the 0 shifts everything one place left automatically.</p>
+      </div>
+      <div class="tip-box">💡 <strong>Estimate first!</strong> 34 × 27 ≈ 30 × 30 = 900. Your exact answer should be close to that.</div>`;
+    },
+    practice() {
+      const a = Math.floor(Math.random()*50)+12;
+      const b = Math.floor(Math.random()*50)+12;
+      return { q:`${a} × ${b} = ?`, a: a*b };
+    }
+  },
+
+  {
+    id: 'long-div', icon: '➗',
+    title: 'Long Division',
+    desc: 'Steps, remainders & the D-M-S-B method',
+    lesson() {
+      return `
+      <div class="lesson-box">
+        <h4>The 4 Steps — D M S B</h4>
+        <p><strong>D</strong>ivide → <strong>M</strong>ultiply → <strong>S</strong>ubtract → <strong>B</strong>ring down</p>
+        <p style="margin-top:0.4rem;color:var(--muted)">Memory trick: <em>"Does McDonald's Sell Burgers?"</em></p>
+      </div>
+      <div class="example-box">Example: 97 ÷ 4
+
+  4 goes into 9 → 2 times      (Divide)
+  2 × 4 = 8                    (Multiply)
+  9 − 8 = 1                    (Subtract)
+  Bring down the 7 → 17        (Bring down)
+
+  4 goes into 17 → 4 times     (Divide)
+  4 × 4 = 16                   (Multiply)
+  17 − 16 = 1                  (Subtract)
+  Nothing left to bring down.
+
+  Answer: 24 R1  (24 remainder 1)</div>
+      <div class="lesson-box">
+        <h4>Checking Your Answer</h4>
+        <div class="example-box">(Quotient × Divisor) + Remainder = Dividend
+(24 × 4) + 1 = 96 + 1 = 97 ✓</div>
+      </div>
+      <div class="tip-box">💡 <strong>Tip:</strong> After each subtraction, the remainder must be smaller than the divisor. If it's not, your quotient digit is too small.</div>`;
+    },
+    practice() {
+      const div = Math.floor(Math.random()*7)+2;
+      const quot = Math.floor(Math.random()*20)+10;
+      const rem = Math.floor(Math.random()*div);
+      const dividend = div*quot + rem;
+      const ans = rem > 0 ? `${quot} R${rem}` : `${quot}`;
+      return { q:`${dividend} ÷ ${div} = ?`, a: ans };
+    }
+  },
+
+  {
+    id: 'fractions4', icon: '🍕',
+    title: 'Fractions (Grade 4)',
+    desc: 'Equivalent fractions, adding & mixed numbers',
+    lesson() {
+      return `
+      <div class="lesson-box">
+        <h4>Equivalent Fractions</h4>
+        <p>Multiply or divide the top <em>and</em> bottom by the same number to make an equivalent fraction.</p>
+        <div class="example-box">1/2 = 2/4 = 3/6 = 4/8
+(multiply top and bottom by 2, 3, 4...)</div>
+      </div>
+      <div class="lesson-box">
+        <h4>Adding Fractions with the Same Denominator</h4>
+        <p>Keep the denominator, add only the numerators.</p>
+        <div class="example-box">2/5 + 1/5 = 3/5   ← bottom stays the same!</div>
+      </div>
+      <div class="lesson-box">
+        <h4>Improper Fractions & Mixed Numbers</h4>
+        <p>When the numerator ≥ denominator, you have an <strong>improper fraction</strong>. Convert it to a <strong>mixed number</strong>:</p>
+        <div class="example-box">7/4 → 4 fits into 7 once with 3 left over
+     → 1 and 3/4  =  1¾</div>
+      </div>
+      <div class="tip-box">💡 <strong>Tip:</strong> Before adding fractions, the denominators MUST be the same.</div>`;
+    },
+    practice() {
+      const d = [3,4,5,6,8][Math.floor(Math.random()*5)];
+      const n1 = Math.floor(Math.random()*(d-1))+1;
+      const n2 = Math.floor(Math.random()*(d-1))+1;
+      const sum = n1+n2;
+      let ans;
+      if (sum === d) ans = '1';
+      else if (sum > d) ans = `${Math.floor(sum/d)} and ${sum%d}/${d}`;
+      else ans = `${sum}/${d}`;
+      return { q:`${n1}/${d} + ${n2}/${d} = ?`, a: ans };
+    }
+  },
+
+  {
+    id: 'decimals', icon: '.',
+    title: 'Decimals',
+    desc: 'Connecting decimals to fractions & place value',
+    lesson() {
+      return `
+      <div class="lesson-box">
+        <h4>Decimals = Fractions in Disguise</h4>
+        <div class="example-box">0.1  =  1/10      (one tenth)
+0.25 = 25/100 = 1/4
+0.5  =  5/10  = 1/2
+0.75 = 75/100 = 3/4</div>
+      </div>
+      <div class="lesson-box">
+        <h4>Decimal Place Value</h4>
+        <div class="example-box" style="text-align:center;font-family:inherit;font-size:1.1rem">
+    3 . 4 7
+    ↑   ↑  ↑
+ones  tenths hundredths</div>
+      </div>
+      <div class="lesson-box">
+        <h4>Comparing Decimals</h4>
+        <p>Line up the decimal points. Compare digit by digit from left to right.</p>
+        <div class="example-box">0.6  vs  0.59
+Tenths: 6 > 5,  so  0.6 > 0.59</div>
+        <p style="margin-top:0.5rem">Remember: 0.6 = 0.60 (adding a trailing zero doesn't change the value)</p>
+      </div>
+      <div class="tip-box">💡 <strong>Tip:</strong> Think of money! $0.50 = 50 cents = 1/2 of a dollar.</div>`;
+    },
+    practice() {
+      const pool = [
+        {q:'What decimal equals 1/2?', a:'0.5'},
+        {q:'What decimal equals 1/4?', a:'0.25'},
+        {q:'What decimal equals 3/4?', a:'0.75'},
+        {q:'What fraction equals 0.5?', a:'1/2'},
+        {q:'What fraction equals 0.25?', a:'1/4'},
+        {q:'What fraction equals 0.1?', a:'1/10'},
+        {q:'Which is bigger: 0.4 or 0.39?', a:'0.4'},
+        {q:'Which is bigger: 0.7 or 0.71?', a:'0.71'},
+      ];
+      return pool[Math.floor(Math.random()*pool.length)];
+    }
+  },
+
+  {
+    id: 'multi-step', icon: '🧩',
+    title: 'Multi-step Word Problems',
+    desc: 'Solving problems that need more than one operation',
+    lesson() {
+      return `
+      <div class="lesson-box">
+        <h4>Strategy: Break It Into Steps</h4>
+        <p>Read the problem twice. On the second read, underline each piece of information and circle the question.</p>
+      </div>
+      <div class="example-box">Problem: "Anna buys 3 packs of pencils with 12 pencils
+each. She gives 8 to her class. How many does she keep?"
+
+Step 1 — Find total pencils:
+  3 × 12 = 36 pencils
+
+Step 2 — Subtract what she gave away:
+  36 − 8 = 28 pencils
+
+Answer: Anna keeps 28 pencils ✓</div>
+      <div class="lesson-box">
+        <h4>Always Check: Did You Answer the Right Question?</h4>
+        <p>Go back and re-read what the problem asked. Make sure your answer makes sense (use estimation to double-check).</p>
+      </div>
+      <div class="tip-box">💡 <strong>Tip:</strong> Write out every step — never try to solve a multi-step problem entirely in your head.</div>`;
+    },
+    practice() {
+      const pool = [
+        { q:'A bookstore has 5 shelves with 24 books each. They sell 37 books. How many books remain?', a:83 },
+        { q:'Jake earns $8 per hour. He works 6 hours Saturday and 4 hours Sunday. How much does he earn total?', a:80 },
+        { q:'A class of 28 students splits into groups of 4. Each group needs 3 markers. How many markers total?', a:21 },
+        { q:'A farmer has 9 rows with 12 plants each. He removes 15 dead plants. How many plants remain?', a:93 },
+        { q:'There are 6 boxes of crayons with 8 crayons each. 14 crayons break. How many good crayons are left?', a:34 },
+      ];
+      return pool[Math.floor(Math.random()*pool.length)];
+    }
+  },
+
+  {
+    id: 'area-perim', icon: '📐',
+    title: 'Area & Perimeter',
+    desc: 'How to never mix these two up again',
+    lesson() {
+      return `
+      <div class="lesson-box">
+        <h4>Perimeter = The Path Around the Outside</h4>
+        <p>Add all side lengths together.</p>
+        <div class="example-box">Rectangle 6 cm × 4 cm
+
+Perimeter = 6 + 4 + 6 + 4 = 20 cm
+    OR
+Perimeter = 2 × (length + width)
+         = 2 × (6 + 4) = 20 cm</div>
+      </div>
+      <div class="lesson-box">
+        <h4>Area = The Space Inside</h4>
+        <p>Multiply length × width. Always use <strong>square units</strong> (cm², m², etc.)</p>
+        <div class="example-box">Rectangle 6 cm × 4 cm
+
+Area = length × width
+     = 6 × 4
+     = 24 cm²</div>
+      </div>
+      <div class="lesson-box">
+        <h4>Memory Tricks</h4>
+        <p><strong>Perimeter</strong> → think "walking the <em>perimeter</em> fence" (going around the edge)<br>
+           <strong>Area</strong> → think "filling the floor with tiles" (covering the inside)</p>
+      </div>
+      <div class="tip-box">💡 <strong>Tip:</strong> Perimeter uses the same unit (cm). Area uses square units (cm²). That's how you know which is which!</div>`;
+    },
+    practice() {
+      const l = Math.floor(Math.random()*14)+3;
+      const w = Math.floor(Math.random()*10)+2;
+      if (Math.random() > 0.5) return { q:`A rectangle is ${l} cm long and ${w} cm wide. What is its AREA?`, a:`${l*w} cm²` };
+      return { q:`A rectangle is ${l} cm long and ${w} cm wide. What is its PERIMETER?`, a:`${2*(l+w)} cm` };
+    }
+  }
+];
+
+const VOCAB = [
+  { word:'Quotient',    def:'The answer to a division problem' },
+  { word:'Factor',      def:'A number multiplied with another (3 and 4 are factors of 12)' },
+  { word:'Product',     def:'The answer to a multiplication problem' },
+  { word:'Denominator', def:'Bottom number of a fraction — total equal parts' },
+  { word:'Numerator',   def:'Top number of a fraction — how many parts we have' },
+  { word:'Equivalent',  def:'Equal in value (1/2 and 2/4 are equivalent)' },
+  { word:'Remainder',   def:'What is left over after dividing evenly' },
+  { word:'Perimeter',   def:'Total distance around the outside of a shape' },
+  { word:'Area',        def:'Amount of space inside a shape, measured in square units' },
+  { word:'Elapsed Time',def:'How much time passes between a start and end time' },
+  { word:'Regrouping',  def:'Trading 10 ones for 1 ten (carrying) or the reverse (borrowing)' },
+  { word:'Mixed Number',def:'A whole number plus a fraction, e.g. 2¾' },
+  { word:'Estimate',    def:'A reasonable close guess, not an exact answer' },
+  { word:'Dividend',    def:'The number being divided in a division problem' },
+  { word:'Divisor',     def:'The number you divide by' },
+  { word:'Improper Fraction', def:'A fraction where the numerator ≥ denominator, e.g. 7/4' },
+];
+
+// ─────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────
+
+let activeTopic = null;
+
+// ─────────────────────────────────────────────
+// RENDER
+// ─────────────────────────────────────────────
+
+function renderGrid(topics, gridId) {
+  document.getElementById(gridId).innerHTML = topics.map(t => `
+    <div class="topic-card" onclick="openTopic('${t.id}')">
+      <div class="topic-icon">${t.icon}</div>
+      <div class="topic-info">
+        <h3>${t.title}</h3>
+        <p>${t.desc}</p>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderVocab() {
+  document.getElementById('vocab-grid').innerHTML = VOCAB.map(v => `
+    <div class="vocab-card">
+      <strong>${v.word}</strong>
+      <span>${v.def}</span>
+    </div>
+  `).join('');
+}
+
+// ─────────────────────────────────────────────
+// TOPIC PANEL
+// ─────────────────────────────────────────────
+
+function openTopic(id) {
+  const all = [...GRADE3, ...GRADE4];
+  const t = all.find(x => x.id === id);
+  if (!t) return;
+  activeTopic = t;
+
+  document.getElementById('p-title').textContent = t.icon + '  ' + t.title;
+  document.getElementById('p-sub').textContent   = t.desc;
+  document.getElementById('tab-lesson').innerHTML = t.lesson();
+
+  loadPractice();
+  switchTab('lesson');
+  document.getElementById('overlay').classList.add('open');
+}
+
+function loadPractice() {
+  if (!activeTopic) return;
+  const prob = activeTopic.practice();
+  activeTopic._current = prob;
+  document.getElementById('tab-practice').innerHTML = `
+    <div class="practice-q">${prob.q}</div>
+    <div class="feedback-box" id="fb"></div>
+    <div class="input-row">
+      <input class="answer-input" id="ans-input" type="text" placeholder="Type your answer…"
+             onkeydown="if(event.key==='Enter') checkAnswer()">
+      <button class="check-btn" onclick="checkAnswer()">Check</button>
+    </div>
+    <button class="new-btn" onclick="loadPractice()">New Problem</button>
+  `;
+  setTimeout(() => document.getElementById('ans-input')?.focus(), 50);
+}
+
+function checkAnswer() {
+  const input = document.getElementById('ans-input');
+  const fb    = document.getElementById('fb');
+  if (!input || !fb || !activeTopic?._current) return;
+
+  const user    = input.value.trim().replace(/\s+/g,'').toLowerCase();
+  const correct = activeTopic._current.a.toString().replace(/\s+/g,'').toLowerCase();
+
+  fb.className = 'feedback-box';
+  if (user === correct) {
+    fb.textContent = '🎉 Correct! Excellent work!';
+    fb.classList.add('correct');
+  } else {
+    fb.textContent = `Not quite — the answer is ${activeTopic._current.a}. Try another!`;
+    fb.classList.add('wrong');
+  }
+}
+
+function closePanel() {
+  document.getElementById('overlay').classList.remove('open');
+}
+
+function overlayClick(e) {
+  if (e.target.id === 'overlay') closePanel();
+}
+
+// ─────────────────────────────────────────────
+// TABS
+// ─────────────────────────────────────────────
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach((b, i) =>
+    b.classList.toggle('active', (tab === 'lesson' && i === 0) || (tab === 'practice' && i === 1))
+  );
+  document.querySelectorAll('.tab-pane').forEach((p, i) =>
+    p.classList.toggle('active', (tab === 'lesson' && i === 0) || (tab === 'practice' && i === 1))
+  );
+  if (tab === 'practice') loadPractice();
+}
+
+// ─────────────────────────────────────────────
+// GRADE SWITCH
+// ─────────────────────────────────────────────
+
+function switchGrade(g) {
+  document.querySelectorAll('.grade-btn').forEach((b, i) =>
+    b.classList.toggle('active', i+3 === g)
+  );
+  document.getElementById('sec3').style.display = g === 3 ? '' : 'none';
+  document.getElementById('sec4').style.display = g === 4 ? '' : 'none';
+}
+
+// ─────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────
+
+renderGrid(GRADE3, 'grid3');
+renderGrid(GRADE4, 'grid4');
+renderVocab();
+</script>
+</body>
+</html>
