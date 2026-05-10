@@ -567,6 +567,164 @@
     @media (max-width: 400px) {
       .chat-window { width: calc(100vw - 2rem); right: 1rem; }
     }
+
+    /* ── Egg Avatar ── */
+    .egg-buddy {
+      width: 46px;
+      height: 56px;
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+      border: 3px solid #fbbf24;
+      background: #fff8e7;
+      transition: background 0.4s, border-color 0.4s;
+    }
+    .egg-buddy.skin-golden  { background: #fef08a; border-color: #eab308; }
+    .egg-buddy.skin-dragon  { background: #bbf7d0; border-color: #16a34a; }
+    .egg-buddy.skin-space   { background: #1e1b4b; border-color: #818cf8; }
+    .egg-buddy.skin-chick   { background: #fef08a; border-color: #facc15; }
+    .egg-buddy.skin-rainbow {
+      background: linear-gradient(135deg,#f9a8d4,#fde68a,#bbf7d0,#bfdbfe,#e9d5ff);
+      border-color: #e879f9;
+    }
+    @keyframes eggWobble {
+      0%,100% { transform: rotate(0deg); }
+      20%      { transform: rotate(-8deg); }
+      60%      { transform: rotate(8deg); }
+    }
+    .wobble { animation: eggWobble 0.5s ease; }
+
+    .chat-fab {
+      width: 70px !important;
+      height: 80px !important;
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40% !important;
+    }
+    .fab-egg {
+      width: 54px;
+      height: 64px;
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.7rem;
+      border: 3px solid rgba(255,255,255,0.5);
+      background: rgba(255,255,255,0.12);
+      transition: background 0.4s, border-color 0.4s;
+    }
+    .fab-egg.skin-golden  { background:#fef08a44; border-color:#eab308aa; }
+    .fab-egg.skin-dragon  { background:#bbf7d044; border-color:#16a34aaa; }
+    .fab-egg.skin-space   { background:#1e1b4b88; border-color:#818cf8aa; }
+    .fab-egg.skin-chick   { background:#fef08a44; border-color:#facc15aa; }
+    .fab-egg.skin-rainbow { background:rgba(233,121,249,0.2); border-color:#e879f9aa; }
+
+    /* Progress row inside chat header */
+    .chat-progress-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 1.1rem 0.6rem;
+      background: rgba(0,0,0,0.1);
+      flex-shrink: 0;
+    }
+    .progress-bar-bg {
+      flex: 1;
+      height: 5px;
+      background: rgba(255,255,255,0.25);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: #fbbf24;
+      border-radius: 99px;
+      transition: width 0.5s ease;
+    }
+    .progress-label { color: rgba(255,255,255,0.8); font-size: 0.7rem; white-space: nowrap; }
+    .skin-btn {
+      background: rgba(255,255,255,0.2);
+      border: none;
+      color: white;
+      padding: 0.2rem 0.55rem;
+      border-radius: 50px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.15s;
+    }
+    .skin-btn:hover { background: rgba(255,255,255,0.35); }
+    .skin-btn:disabled { opacity: 0.35; cursor: default; }
+
+    /* Skin picker */
+    .skin-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15,23,42,0.6);
+      z-index: 400;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .skin-overlay.open { display: flex; }
+    .skin-panel {
+      background: white;
+      border-radius: 20px;
+      padding: 1.5rem;
+      width: 100%;
+      max-width: 380px;
+      animation: slideUp 0.22s ease;
+    }
+    .skin-panel h3 { font-size: 1.1rem; font-weight: 800; margin-bottom: 0.25rem; }
+    .skin-panel p  { font-size: 0.82rem; color: var(--muted); margin-bottom: 1rem; }
+    .skin-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.7rem;
+    }
+    .skin-option {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.7rem 0.4rem;
+      border: 2px solid var(--border);
+      border-radius: 14px;
+      cursor: pointer;
+      transition: all 0.15s;
+      position: relative;
+    }
+    .skin-option:hover:not(.locked-skin) { border-color: var(--primary); background: #eff6ff; }
+    .skin-option.active-skin { border-color: var(--primary); background: #eff6ff; }
+    .skin-option.locked-skin { opacity: 0.4; cursor: not-allowed; }
+    .skin-egg-preview {
+      width: 36px;
+      height: 44px;
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      border: 2px solid;
+    }
+    .skin-name  { font-size: 0.7rem; font-weight: 700; text-align: center; color: var(--text); }
+    .skin-unlock{ font-size: 0.62rem; color: var(--muted); text-align: center; }
+    .lock-icon  { position: absolute; top: 4px; right: 6px; font-size: 0.7rem; }
+    .skin-close-btn {
+      width: 100%;
+      margin-top: 1rem;
+      padding: 0.65rem;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -619,18 +777,25 @@
 
 <!-- Chat Buddy -->
 <button class="chat-fab" onclick="toggleChat()" title="Chat with Max!">
-  🤖
+  <div class="fab-egg" id="fab-egg">🥚</div>
   <div class="chat-badge" id="chat-badge">1</div>
 </button>
 
 <div class="chat-window" id="chat-window">
   <div class="chat-header">
-    <div class="chat-avatar">🤖</div>
+    <div class="egg-buddy" id="header-egg">🥚</div>
     <div class="chat-header-info">
-      <strong>Max the Math Bot</strong>
-      <span>Always here to help!</span>
+      <strong>Max the Math Egg</strong>
+      <span id="max-subtitle">I'm just an egg... for now!</span>
     </div>
     <button class="chat-close" onclick="toggleChat()">✕</button>
+  </div>
+  <div class="chat-progress-row">
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="prog-fill" style="width:0%"></div>
+    </div>
+    <span class="progress-label" id="prog-label">0 / 20</span>
+    <button class="skin-btn" id="skin-btn" onclick="openSkins()" disabled>🎨 Skins</button>
   </div>
   <div class="chat-messages" id="chat-messages"></div>
   <div class="chat-chips" id="chat-chips"></div>
@@ -638,6 +803,16 @@
     <input class="chat-input" id="chat-input" placeholder="Ask Max anything…"
            onkeydown="if(event.key==='Enter') sendMessage()">
     <button class="chat-send" onclick="sendMessage()">➤</button>
+  </div>
+</div>
+
+<!-- Skin Picker -->
+<div class="skin-overlay" id="skin-overlay" onclick="if(event.target.id==='skin-overlay') closeSkins()">
+  <div class="skin-panel">
+    <h3>🎨 Choose Max's Look</h3>
+    <p>Complete more questions and lessons to unlock new skins!</p>
+    <div class="skin-grid" id="skin-grid"></div>
+    <button class="skin-close-btn" onclick="closeSkins()">Done</button>
   </div>
 </div>
 
@@ -1153,6 +1328,7 @@ function openTopic(id) {
   const t = all.find(x => x.id === id);
   if (!t) return;
   activeTopic = t;
+  addProgress(1);
 
   document.getElementById('p-title').textContent = t.icon + '  ' + t.title;
   document.getElementById('p-sub').textContent   = t.desc;
@@ -1364,16 +1540,126 @@ const FALLBACK = [
   "Let me know what math topic you're working on and I'll do my best to help! 💪",
 ];
 
+// ── Skin / Progress system ──
+const SKINS = [
+  { id:'plain',   name:'Plain Egg',   face:'🥚', bg:'#fff8e7', border:'#fbbf24', unlockAt:0  },
+  { id:'golden',  name:'Golden Egg',  face:'✨', bg:'#fef08a', border:'#eab308', unlockAt:5  },
+  { id:'dragon',  name:'Dragon Egg',  face:'🐲', bg:'#bbf7d0', border:'#16a34a', unlockAt:10 },
+  { id:'space',   name:'Space Egg',   face:'🚀', bg:'#1e1b4b', border:'#818cf8', unlockAt:15 },
+  { id:'chick',   name:'Baby Chick',  face:'🐣', bg:'#fef9c3', border:'#facc15', unlockAt:20 },
+  { id:'rainbow', name:'Rainbow Egg', face:'🌈', bg:'linear-gradient(135deg,#f9a8d4,#fde68a,#bbf7d0,#bfdbfe)', border:'#e879f9', unlockAt:20 },
+];
+
+const SUBTITLES = [
+  'I\'m just an egg... for now!',
+  'Getting warmer... 🔥',
+  'Starting to crack! 🥚',
+  'Almost hatched! 🐣',
+  'Fully hatched! Let\'s go! 🎉',
+];
+
+let progress  = parseInt(localStorage.getItem('maxProgress') || '0');
+let activeSkin = localStorage.getItem('maxSkin') || 'plain';
 let chatOpen = false;
 let chatQuizAnswer = null;
 let chatHistory = [];
+
+function addProgress(n = 1) {
+  const prev = progress;
+  progress = Math.min(progress + n, 20);
+  localStorage.setItem('maxProgress', progress);
+  updateEggUI();
+
+  // Check for new skin unlocks
+  const newUnlocks = SKINS.filter(s => s.unlockAt > prev && s.unlockAt <= progress);
+  if (newUnlocks.length > 0) {
+    setTimeout(() => {
+      botSay(`🎉 <b>New skin unlocked: ${newUnlocks.map(s=>s.name).join(', ')}!</b> Click <b>🎨 Skins</b> above to switch!`,
+        ['🎨 Change skin','Quiz me!']);
+      wobbleEgg();
+    }, 800);
+  }
+}
+
+function wobbleEgg() {
+  ['fab-egg','header-egg'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.classList.remove('wobble');
+    void el.offsetWidth;
+    el.classList.add('wobble');
+  });
+}
+
+function updateEggUI() {
+  const skin = SKINS.find(s => s.id === activeSkin) || SKINS[0];
+  const pct  = Math.min((progress / 20) * 100, 100);
+
+  // Progress bar
+  const fill = document.getElementById('prog-fill');
+  const label = document.getElementById('prog-label');
+  if (fill)  fill.style.width = pct + '%';
+  if (label) label.textContent = progress + ' / 20';
+
+  // Unlock skin button once anything is unlocked
+  const anyUnlocked = SKINS.some(s => s.unlockAt > 0 && s.unlockAt <= progress);
+  const skinBtn = document.getElementById('skin-btn');
+  if (skinBtn) skinBtn.disabled = !anyUnlocked;
+
+  // Subtitle
+  const stage = Math.min(Math.floor(progress / 5), SUBTITLES.length - 1);
+  const sub = document.getElementById('max-subtitle');
+  if (sub) sub.textContent = SUBTITLES[stage];
+
+  // Apply skin class to egg elements
+  ['fab-egg','header-egg'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = skin.face;
+    SKINS.forEach(s => el.classList.remove('skin-'+s.id));
+    el.classList.add('skin-'+skin.id);
+    el.style.background = skin.bg;
+    el.style.borderColor = skin.border;
+  });
+}
+
+function openSkins() {
+  const grid = document.getElementById('skin-grid');
+  grid.innerHTML = SKINS.map(s => {
+    const unlocked = progress >= s.unlockAt;
+    const isActive = activeSkin === s.id;
+    return `
+      <div class="skin-option ${isActive?'active-skin':''} ${!unlocked?'locked-skin':''}"
+           onclick="${unlocked ? `selectSkin('${s.id}')` : ''}">
+        <div class="skin-egg-preview" style="background:${s.bg};border-color:${s.border}">${s.face}</div>
+        <div class="skin-name">${s.name}</div>
+        ${!unlocked ? `<div class="skin-unlock">🔒 ${s.unlockAt} pts</div>` : ''}
+        ${isActive ? '<div class="lock-icon">✅</div>' : ''}
+        ${!unlocked ? '<div class="lock-icon">🔒</div>' : ''}
+      </div>`;
+  }).join('');
+  document.getElementById('skin-overlay').classList.add('open');
+}
+
+function selectSkin(id) {
+  activeSkin = id;
+  localStorage.setItem('maxSkin', id);
+  updateEggUI();
+  wobbleEgg();
+  openSkins(); // re-render to update active marker
+}
+
+function closeSkins() {
+  document.getElementById('skin-overlay').classList.remove('open');
+}
 
 function toggleChat() {
   chatOpen = !chatOpen;
   document.getElementById('chat-window').classList.toggle('open', chatOpen);
   document.getElementById('chat-badge').style.display = 'none';
+  updateEggUI();
   if (chatOpen && chatHistory.length === 0) {
-    setTimeout(() => botSay("Hey! 👋 I'm <b>Max</b>, your math buddy! What do you need help with today?",
+    setTimeout(() => botSay("Hey! 👋 I'm <b>Max</b>! I start as a plain egg, but answer questions and open lessons to unlock cool new looks for me! What math do you need help with?",
       ['Multiplication','Fractions','Division','Word problems','Area & Perimeter']), 300);
   }
   if (chatOpen) setTimeout(() => document.getElementById('chat-input').focus(), 300);
@@ -1424,9 +1710,10 @@ function sendMessage() {
 
   // Check if answering a quiz
   if (chatQuizAnswer !== null) {
-    const cleaned = text.replace(/[^0-9.]/g,'');
-    if (cleaned == chatQuizAnswer) {
+    const cleaned = text.replace(/[^0-9./]/g,'');
+    if (cleaned == String(chatQuizAnswer).replace(/\s/g,'')) {
       chatQuizAnswer = null;
+      addProgress(1);
       botSay("🎉 YES! That's correct! You're amazing!", ['Quiz me again!','New topic','Word problem']);
     } else {
       botSay(`Not quite! The answer was <b>${chatQuizAnswer}</b>. Don't give up — try another?`, ['Quiz me!','Get help','Word problem']);
@@ -1449,9 +1736,13 @@ function sendMessage() {
 }
 
 function chipClick(text) {
+  if (text === '🎨 Change skin') { openSkins(); return; }
   document.getElementById('chat-input').value = text;
   sendMessage();
 }
+
+// init egg UI on page load
+updateEggUI();
 </script>
 </body>
 </html>
