@@ -805,6 +805,174 @@
       font-weight: 700;
       cursor: pointer;
     }
+
+    /* ══ MINI GAMES ══ */
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1.1rem;
+      margin-bottom: 2.5rem;
+    }
+    .game-card {
+      border-radius: 20px;
+      padding: 1.8rem 1.2rem 1.4rem;
+      cursor: pointer;
+      text-align: center;
+      border: 2.5px solid transparent;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .game-card:hover { transform: translateY(-6px) scale(1.03); box-shadow: 0 14px 36px rgba(0,0,0,0.14); }
+    .gc-orange { background: linear-gradient(135deg,#fff7ed,#fef3c7); border-color: #fb923c; }
+    .gc-blue   { background: linear-gradient(135deg,#eff6ff,#dbeafe); border-color: #60a5fa; }
+    .gc-purple { background: linear-gradient(135deg,#fdf4ff,#ede9fe); border-color: #c4b5fd; }
+    .gc-green  { background: linear-gradient(135deg,#f0fdf4,#d1fae5); border-color: #6ee7b7; }
+    .game-icon  { font-size: 3rem; margin-bottom: 0.6rem; display: block; }
+    .game-card h3 { font-size: 1.05rem; font-weight: 800; margin-bottom: 0.35rem; }
+    .game-card p  { font-size: 0.8rem; color: var(--muted); margin-bottom: 1rem; line-height: 1.4; }
+    .play-btn {
+      padding: 0.45rem 1.4rem;
+      background: linear-gradient(135deg,#8b5cf6,#ec4899);
+      color: white; border: none; border-radius: 50px;
+      font-size: 0.88rem; font-weight: 800; cursor: pointer;
+      box-shadow: 0 3px 10px rgba(139,92,246,0.35);
+    }
+
+    /* Game overlay */
+    .game-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(10,5,20,0.88);
+      z-index: 500; align-items: center; justify-content: center; padding: 1rem;
+    }
+    .game-overlay.open { display: flex; }
+    .game-wrapper {
+      background: white; border-radius: 24px;
+      width: 100%; max-width: 500px; max-height: 92vh;
+      overflow-y: auto; position: relative;
+    }
+    .game-topbar {
+      background: linear-gradient(135deg,#f97316,#ec4899,#8b5cf6);
+      border-radius: 24px 24px 0 0; padding: 0.85rem 1.2rem;
+      display: flex; align-items: center; justify-content: space-between; color: white;
+    }
+    .game-topbar strong { font-size: 1rem; font-weight: 800; }
+    .game-x {
+      background: rgba(255,255,255,0.2); border: none; color: white;
+      width: 30px; height: 30px; border-radius: 50%; cursor: pointer;
+      font-size: 0.9rem; display: flex; align-items: center; justify-content: center;
+    }
+    #game-container { padding: 1.3rem; min-height: 360px; }
+
+    /* HUD */
+    .game-hud {
+      display: flex; justify-content: space-between; align-items: center;
+      background: #f8f0ff; border-radius: 12px; padding: 0.55rem 1rem;
+      margin-bottom: 1.2rem; font-size: 0.88rem; font-weight: 600;
+    }
+    .hud-timer { font-size: 1.4rem; font-weight: 900; color: #8b5cf6; }
+
+    /* Question */
+    .game-question {
+      font-size: 2rem; font-weight: 900; text-align: center;
+      padding: 1.4rem; background: linear-gradient(135deg,#fce7f3,#ede9fe);
+      border-radius: 16px; margin-bottom: 1.1rem; color: #4c1d95;
+      border: 2px solid #e9d5ff; letter-spacing: 1px;
+    }
+
+    /* Choices */
+    .choice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem; margin-bottom: 0.8rem; }
+    .choice-btn {
+      padding: 0.9rem; font-size: 1.3rem; font-weight: 800;
+      border: 2.5px solid #e9d5ff; border-radius: 14px;
+      background: white; cursor: pointer; transition: all 0.15s; color: var(--text);
+    }
+    .choice-btn:hover { background: linear-gradient(135deg,#fce7f3,#ede9fe); border-color: #c4b5fd; transform: scale(1.04); }
+
+    /* Feedback */
+    .game-fb { text-align: center; font-size: 1rem; font-weight: 700; padding: 0.5rem; border-radius: 10px; min-height: 2rem; }
+    .fb-ok  { background: #d1fae5; color: #065f46; }
+    .fb-err { background: #fee2e2; color: #991b1b; }
+
+    /* End screen */
+    .end-screen { text-align: center; padding: 0.5rem; }
+    .end-icon   { font-size: 3.5rem; margin-bottom: 0.5rem; }
+    .end-score  { font-size: 2.8rem; font-weight: 900; color: #8b5cf6; margin: 0.4rem 0; }
+    .end-stars  { font-size: 2rem; margin: 0.3rem 0 0.8rem; }
+    .end-record { font-size: 1rem; font-weight: 700; color: #f59e0b; margin-bottom: 0.8rem; }
+    .end-sub    { font-size: 0.88rem; color: var(--muted); margin-bottom: 0.8rem; }
+    .btn-again {
+      display: block; width: 100%; padding: 0.8rem;
+      background: linear-gradient(135deg,#8b5cf6,#ec4899);
+      color: white; border: none; border-radius: 14px;
+      font-size: 1rem; font-weight: 800; cursor: pointer; margin-top: 0.6rem;
+      transition: opacity 0.15s;
+    }
+    .btn-again:hover { opacity: 0.88; }
+    .btn-secondary {
+      display: block; width: 100%; padding: 0.7rem;
+      background: #f3e8ff; color: #7c3aed; border: none; border-radius: 14px;
+      font-size: 0.9rem; font-weight: 700; cursor: pointer; margin-top: 0.5rem;
+    }
+
+    /* Balloon Pop */
+    .bp-question { font-size: 1.4rem; font-weight: 800; text-align: center; margin-bottom: 0.6rem; color: #4c1d95; }
+    .balloon-sky {
+      position: relative; height: 300px; border-radius: 16px; overflow: hidden;
+      background: linear-gradient(180deg,#0f0c29,#302b63,#24243e);
+    }
+    .balloon {
+      position: absolute; width: 64px; cursor: pointer;
+      bottom: -80px; left: var(--bx);
+      animation: bFloat var(--bd) ease-in-out infinite;
+      animation-delay: var(--delay);
+    }
+    .balloon:hover { filter: brightness(1.2); }
+    @keyframes bFloat {
+      0%   { transform: translateY(0)   rotate(-4deg); }
+      25%  { transform: translateY(-40px) rotate(3deg); }
+      50%  { transform: translateY(-80px) rotate(-3deg); }
+      75%  { transform: translateY(-120px) rotate(4deg); }
+      100% { transform: translateY(-160px) rotate(-4deg); }
+    }
+    .ball-body {
+      width: 64px; height: 74px; border-radius: 50%;
+      background: var(--bc); display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; font-weight: 900; color: white;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+      border: 3px solid rgba(255,255,255,0.25);
+    }
+    .ball-knot { width: 8px; height: 10px; background: var(--bc); margin: 0 auto; border-radius: 0 0 5px 5px; }
+    .pop-fx { text-align: center; font-size: 2.5rem; padding: 6rem 0; }
+
+    /* Fraction Flip */
+    .flip-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 0.6rem; margin-top: 0.5rem; }
+    .f-card { height: 78px; cursor: pointer; perspective: 700px; }
+    .f-inner {
+      width: 100%; height: 100%; position: relative;
+      transform-style: preserve-3d; transition: transform 0.38s;
+    }
+    .f-card.flipped .f-inner { transform: rotateY(180deg); }
+    .f-front, .f-back {
+      position: absolute; inset: 0; display: flex; align-items: center;
+      justify-content: center; border-radius: 12px; font-weight: 800; backface-visibility: hidden;
+    }
+    .f-front { background: linear-gradient(135deg,#8b5cf6,#ec4899); color: white; font-size: 1.6rem; }
+    .f-back  { background: linear-gradient(135deg,#fce7f3,#ede9fe); border: 2px solid #e9d5ff; color: #4c1d95; font-size: 1rem; transform: rotateY(180deg); }
+    .f-card.matched .f-back { background: linear-gradient(135deg,#d1fae5,#dcfce7); border-color: #6ee7b7; color: #065f46; }
+    .flip-moves { text-align: center; font-size: 0.85rem; color: var(--muted); margin-top: 0.75rem; }
+
+    /* Times table select */
+    .ts-intro { text-align: center; }
+    .ts-intro p { color: var(--muted); margin: 0.4rem 0 1rem; }
+    .ts-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 0.55rem; }
+    .ts-btn {
+      padding: 0.85rem 0.4rem; border: 2.5px solid #e9d5ff; border-radius: 14px;
+      background: #fdf4ff; font-size: 0.95rem; font-weight: 800;
+      cursor: pointer; transition: all 0.15s; color: var(--text);
+    }
+    .ts-btn:hover { background: linear-gradient(135deg,#fce7f3,#ede9fe); border-color: #c4b5fd; }
+    .ts-btn span { display: block; font-size: 0.7rem; margin-top: 0.1rem; }
+
+    @media (max-width: 480px) { .flip-grid { grid-template-columns: repeat(4,1fr); gap: 0.4rem; } .f-card { height: 65px; } }
   </style>
 </head>
 <body>
@@ -815,6 +983,7 @@
   <div class="grade-switcher">
     <button class="grade-btn active" onclick="switchGrade(3)">Grade 3</button>
     <button class="grade-btn"        onclick="switchGrade(4)">Grade 4</button>
+    <button class="grade-btn"        onclick="switchGrade('games')">🎮 Games</button>
   </div>
 </header>
 
@@ -829,6 +998,12 @@
   <div id="sec4" style="display:none">
     <p class="section-label">Grade 4 — click a topic to study</p>
     <div class="topics-grid" id="grid4"></div>
+  </div>
+
+  <!-- Games -->
+  <div id="sec-games" style="display:none">
+    <p class="section-label">🎮 Mini Games — learn by playing!</p>
+    <div class="games-grid" id="games-grid"></div>
   </div>
 
   <!-- Vocabulary -->
@@ -854,6 +1029,17 @@
       <div class="tab-pane active" id="tab-lesson"></div>
       <div class="tab-pane"        id="tab-practice"></div>
     </div>
+  </div>
+</div>
+
+<!-- Game Overlay -->
+<div class="game-overlay" id="game-overlay">
+  <div class="game-wrapper">
+    <div class="game-topbar">
+      <strong id="game-title">🎮 Mini Game</strong>
+      <button class="game-x" onclick="closeGame()">✕</button>
+    </div>
+    <div id="game-container"></div>
   </div>
 </div>
 
@@ -1483,11 +1669,14 @@ function switchTab(tab) {
 // ─────────────────────────────────────────────
 
 function switchGrade(g) {
-  document.querySelectorAll('.grade-btn').forEach((b, i) =>
-    b.classList.toggle('active', i+3 === g)
-  );
-  document.getElementById('sec3').style.display = g === 3 ? '' : 'none';
-  document.getElementById('sec4').style.display = g === 4 ? '' : 'none';
+  document.querySelectorAll('.grade-btn').forEach((b, i) => {
+    const vals = [3, 4, 'games'];
+    b.classList.toggle('active', vals[i] === g);
+  });
+  document.getElementById('sec3').style.display        = g === 3       ? '' : 'none';
+  document.getElementById('sec4').style.display        = g === 4       ? '' : 'none';
+  document.getElementById('sec-games').style.display   = g === 'games' ? '' : 'none';
+  document.querySelector('.vocab-section').style.display = g === 'games' ? 'none' : '';
 }
 
 // ─────────────────────────────────────────────
@@ -1825,6 +2014,320 @@ function chipClick(text) {
 
 // init egg UI on page load
 updateEggUI();
+
+// ─────────────────────────────────────────────
+// MINI GAMES
+// ─────────────────────────────────────────────
+
+const GAME_DEFS = [
+  { id:'speed-math',  icon:'⚡', title:'Speed Math',        desc:'Answer as many problems as you can before time runs out!', cls:'gc-orange' },
+  { id:'balloon-pop', icon:'🎈', title:'Balloon Pop',       desc:'Pop the balloon showing the correct answer. You have 3 lives!', cls:'gc-blue' },
+  { id:'frac-flip',   icon:'🃏', title:'Fraction Flip',     desc:'Match equivalent fractions in this memory card game!', cls:'gc-purple' },
+  { id:'times-stars', icon:'⭐', title:'Times Table Stars', desc:'Pick a times table, answer 10 questions, earn up to 3 stars!', cls:'gc-green' },
+];
+
+function renderGames() {
+  document.getElementById('games-grid').innerHTML = GAME_DEFS.map(g => `
+    <div class="game-card ${g.cls}" onclick="openGame('${g.id}')">
+      <span class="game-icon">${g.icon}</span>
+      <h3>${g.title}</h3>
+      <p>${g.desc}</p>
+      <button class="play-btn">▶ Play Now</button>
+    </div>`).join('');
+}
+
+let _gameCleanup = null;
+
+function openGame(id) {
+  if (_gameCleanup) { _gameCleanup(); _gameCleanup = null; }
+  const def = GAME_DEFS.find(g => g.id === id);
+  document.getElementById('game-title').textContent = (def ? def.icon + ' ' + def.title : '🎮 Game');
+  document.getElementById('game-container').innerHTML = '';
+  document.getElementById('game-overlay').classList.add('open');
+  if (id === 'speed-math')  startSpeedMath();
+  if (id === 'balloon-pop') startBalloonPop();
+  if (id === 'frac-flip')   startFracFlip();
+  if (id === 'times-stars') startTimesStars();
+}
+
+function closeGame() {
+  if (_gameCleanup) { _gameCleanup(); _gameCleanup = null; }
+  document.getElementById('game-overlay').classList.remove('open');
+}
+
+// helper: random int in [lo, hi]
+function rnd(lo, hi) { return Math.floor(Math.random() * (hi - lo + 1)) + lo; }
+
+// helper: 3 wrong answers near correct
+function wrongSet(answer, count, lo, hi) {
+  const s = new Set();
+  let tries = 0;
+  while (s.size < count && tries < 200) {
+    tries++;
+    const w = answer + rnd(-15, 15);
+    if (w !== answer && w >= lo && w <= hi) s.add(w);
+  }
+  return [...s];
+}
+
+// ── ⚡ Speed Math ─────────────────────────────
+function startSpeedMath() {
+  const gc = document.getElementById('game-container');
+  let score = 0, timeLeft = 60, prob, timerId;
+  const best = parseInt(localStorage.getItem('sm-best') || '0');
+
+  function mkProb() {
+    const t = ['×','÷','+','-'][rnd(0,3)];
+    let a, b, ans, q;
+    if (t === '×') { a = rnd(2,9); b = rnd(2,9); ans = a*b;   q = `${a} × ${b}`; }
+    if (t === '÷') { b = rnd(2,9); ans = rnd(2,9); a = b*ans; q = `${a} ÷ ${b}`; }
+    if (t === '+') { a = rnd(50,300); b = rnd(50,300); ans = a+b; q = `${a} + ${b}`; }
+    if (t === '-') { a = rnd(100,400); b = rnd(10,99); ans = a-b; q = `${a} − ${b}`; }
+    const wrongs = wrongSet(ans, 3, 1, 999);
+    const choices = [...wrongs, ans].sort(() => Math.random()-0.5);
+    return { q, ans, choices };
+  }
+
+  function render() {
+    prob = mkProb();
+    gc.innerHTML = `
+      <div class="game-hud">
+        <div>⚡ <b>${score} pts</b></div>
+        <div class="hud-timer" id="sm-t">${timeLeft}s</div>
+        <div>🏆 Best: <b>${Math.max(score,best)}</b></div>
+      </div>
+      <div class="game-question">${prob.q} = ?</div>
+      <div class="choice-grid">${prob.choices.map(c=>`<button class="choice-btn" onclick="smPick(${c})">${c}</button>`).join('')}</div>
+      <div class="game-fb" id="sm-fb"></div>`;
+  }
+
+  window.smPick = function(v) {
+    const fb = document.getElementById('sm-fb');
+    if (v === prob.ans) { score += 10; fb.textContent = '🎉 +10'; fb.className = 'game-fb fb-ok'; }
+    else { fb.textContent = `❌ Answer: ${prob.ans}`; fb.className = 'game-fb fb-err'; }
+    setTimeout(render, 480);
+  };
+
+  timerId = setInterval(() => {
+    timeLeft--;
+    const el = document.getElementById('sm-t');
+    if (el) { el.textContent = timeLeft+'s'; if (timeLeft<=10) el.style.color='#ef4444'; }
+    if (timeLeft <= 0) {
+      clearInterval(timerId);
+      const nb = Math.max(score, best);
+      localStorage.setItem('sm-best', nb);
+      gc.innerHTML = `
+        <div class="end-screen">
+          <div class="end-icon">⚡</div>
+          <h2>Time's Up!</h2>
+          <div class="end-score">${score} pts</div>
+          ${score > best ? '<div class="end-record">🏆 New High Score!</div>' : `<div class="end-sub">Best: ${best} pts</div>`}
+          <button class="btn-again" onclick="startSpeedMath()">Play Again</button>
+        </div>`;
+    }
+  }, 1000);
+
+  _gameCleanup = () => clearInterval(timerId);
+  render();
+}
+
+// ── 🎈 Balloon Pop ────────────────────────────
+function startBalloonPop() {
+  const gc = document.getElementById('game-container');
+  const COLS = ['#f97316','#ec4899','#8b5cf6','#06b6d4','#10b981','#fbbf24'];
+  let lives = 3, score = 0, correctAns;
+
+  function hudHTML() {
+    return '❤️'.repeat(lives) + '🖤'.repeat(3-lives);
+  }
+
+  function round() {
+    const a = rnd(2,9), b = rnd(2,9);
+    correctAns = a*b;
+    const others = wrongSet(correctAns, 5, 2, 99);
+    const all = [...others, correctAns].sort(() => Math.random()-0.5);
+    gc.innerHTML = `
+      <div class="game-hud">
+        <div id="bp-lives">${hudHTML()}</div>
+        <div>Score: <b>${score}</b></div>
+      </div>
+      <div class="bp-question">${a} × ${b} = ?</div>
+      <div class="balloon-sky" id="bp-sky">
+        ${all.map((n,i)=>`
+          <div class="balloon" style="--bx:${6+i*15}%;--bc:${COLS[i]};--bd:${2.5+i*0.35}s;--delay:${i*0.28}s"
+               onclick="bpPick(${n})">
+            <div class="ball-body">${n}</div>
+            <div class="ball-knot"></div>
+          </div>`).join('')}
+      </div>`;
+  }
+
+  window.bpPick = function(v) {
+    if (v === correctAns) {
+      score++;
+      document.getElementById('bp-sky').innerHTML = '<div class="pop-fx">💥🎉💥</div>';
+      setTimeout(round, 650);
+    } else {
+      lives--;
+      if (lives <= 0) {
+        gc.innerHTML = `
+          <div class="end-screen">
+            <div class="end-icon">🎈</div>
+            <h2>Game Over!</h2>
+            <div class="end-score">${score}</div>
+            <div class="end-sub">rounds popped</div>
+            <button class="btn-again" onclick="startBalloonPop()">Play Again</button>
+          </div>`;
+      } else {
+        document.getElementById('bp-lives').textContent = hudHTML();
+        round();
+      }
+    }
+  };
+
+  round();
+}
+
+// ── 🃏 Fraction Flip ─────────────────────────
+function startFracFlip() {
+  const gc = document.getElementById('game-container');
+  const PAIRS = [
+    {a:'1/2', b:'2/4'}, {a:'3/4', b:'6/8'},
+    {a:'1/3', b:'2/6'}, {a:'2/5', b:'4/10'},
+    {a:'1/4', b:'3/12'},{a:'3/6', b:'1/2'},
+  ];
+  // pick 4 pairs, shuffle into 8 cards
+  const chosen = PAIRS.sort(()=>Math.random()-0.5).slice(0,4);
+  const cards = [];
+  chosen.forEach((p,pid) => {
+    cards.push({val:p.a, pid, ci:0}); cards.push({val:p.b, pid, ci:1});
+  });
+  cards.sort(()=>Math.random()-0.5).forEach((c,i)=>c.idx=i);
+
+  let flipped=[], matched=new Set(), moves=0, locked=false;
+
+  function render() {
+    gc.innerHTML = `
+      <div class="game-hud"><div>🃏 Fraction Flip</div><div>Moves: <b>${moves}</b></div></div>
+      <div class="flip-grid">
+        ${cards.map((c,i)=>{
+          const up = flipped.includes(i) || matched.has(c.pid);
+          const ok = matched.has(c.pid);
+          return `<div class="f-card ${up?'flipped':''} ${ok?'matched':''}" onclick="ffPick(${i})">
+            <div class="f-inner">
+              <div class="f-front">❓</div>
+              <div class="f-back">${c.val}</div>
+            </div></div>`;
+        }).join('')}
+      </div>
+      <div class="flip-moves">${matched.size===4?'🎉 All matched!':'Find the matching fraction pairs!'}</div>`;
+  }
+
+  window.ffPick = function(i) {
+    if (locked || flipped.includes(i) || matched.has(cards[i].pid)) return;
+    flipped.push(i);
+    render();
+    if (flipped.length === 2) {
+      moves++;
+      locked = true;
+      const [a,b] = flipped;
+      if (cards[a].pid === cards[b].pid) {
+        matched.add(cards[a].pid);
+        flipped = []; locked = false;
+        render();
+        if (matched.size === 4) {
+          setTimeout(()=>{
+            gc.innerHTML = `
+              <div class="end-screen">
+                <div class="end-icon">🃏</div>
+                <h2>All Matched!</h2>
+                <div class="end-score">${moves}</div>
+                <div class="end-sub">moves — ${moves<=8?'🌟 Amazing!':moves<=14?'👍 Great!':'✅ You did it!'}</div>
+                <button class="btn-again" onclick="startFracFlip()">Play Again</button>
+              </div>`;
+          }, 500);
+        }
+      } else {
+        setTimeout(()=>{ flipped=[]; locked=false; render(); }, 950);
+      }
+    }
+  };
+
+  render();
+}
+
+// ── ⭐ Times Table Stars ──────────────────────
+function startTimesStars() {
+  const gc = document.getElementById('game-container');
+
+  function showSelect() {
+    gc.innerHTML = `
+      <div class="ts-intro">
+        <div style="font-size:2.5rem">⭐</div>
+        <h2 style="font-weight:900;margin:0.3rem 0">Times Table Stars</h2>
+        <p>Pick a times table to practice:</p>
+        <div class="ts-grid">
+          ${[2,3,4,5,6,7,8,9,10,11,12].map(n=>{
+            const s = parseInt(localStorage.getItem('ts-'+n)||'0');
+            const stars = s>=10?'⭐⭐⭐':s>=8?'⭐⭐':s>=6?'⭐':'';
+            return `<button class="ts-btn" onclick="tsPlay(${n})">${n}×<span>${stars||'—'}</span></button>`;
+          }).join('')}
+        </div>
+      </div>`;
+  }
+
+  window.tsPlay = function(table) {
+    const qs = Array.from({length:10},()=>{
+      const b = rnd(2,12), ans = table*b;
+      const ws = wrongSet(ans,3,1,144);
+      return {q:`${table} × ${b}`,ans,choices:[...ws,ans].sort(()=>Math.random()-0.5)};
+    });
+    let qi=0, hits=0;
+
+    function showQ() {
+      if (qi>=10) {
+        const prev = parseInt(localStorage.getItem('ts-'+table)||'0');
+        if (hits>prev) localStorage.setItem('ts-'+table, hits);
+        const stars = hits>=10?'⭐⭐⭐':hits>=8?'⭐⭐':hits>=6?'⭐':'';
+        gc.innerHTML = `
+          <div class="end-screen">
+            <div class="end-icon">⭐</div>
+            <h2>${table}× Done!</h2>
+            <div class="end-score">${hits}/10</div>
+            <div class="end-stars">${stars||'💪 Keep going!'}</div>
+            ${hits>prev?'<div class="end-record">🏆 New best!</div>':''}
+            <button class="btn-again" onclick="tsPlay(${table})">Try Again</button>
+            <button class="btn-secondary" onclick="startTimesStars()">Pick Table</button>
+          </div>`;
+        return;
+      }
+      const p = qs[qi];
+      gc.innerHTML = `
+        <div class="game-hud">
+          <div>⭐ ${table}× table</div>
+          <div>Q ${qi+1}/10 &nbsp; ✅ ${hits}</div>
+        </div>
+        <div class="game-question">${p.q} = ?</div>
+        <div class="choice-grid">${p.choices.map(c=>`<button class="choice-btn" onclick="tsAns(${c})">${c}</button>`).join('')}</div>
+        <div class="game-fb" id="ts-fb"></div>`;
+    }
+
+    window.tsAns = function(v) {
+      const p = qs[qi];
+      const fb = document.getElementById('ts-fb');
+      if (v===p.ans) { hits++; fb.textContent='🌟 Correct!'; fb.className='game-fb fb-ok'; }
+      else { fb.textContent=`❌ Answer: ${p.ans}`; fb.className='game-fb fb-err'; }
+      qi++;
+      setTimeout(showQ, 550);
+    };
+
+    showQ();
+  };
+
+  showSelect();
+}
+
+renderGames();
 </script>
 </body>
 </html>
